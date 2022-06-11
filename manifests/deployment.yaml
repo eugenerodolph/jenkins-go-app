@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: hello-app
-        image: asia-south1-docker.pkg.dev/searce-playground-v1/jenkins/hello-app:v1
+        image: asia-south1-docker.pkg.dev/searce-playground-v1/jenkins/hello-app:
         ports:
         - containerPort: 8080
         resources:
