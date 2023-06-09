@@ -5,8 +5,8 @@ agent{
     }
 }
     environment {
-        ZONE = "XX"
-        PROJECT_ID = "XX"
+        ZONE = "europe-west4-a"
+        PROJECT_ID = "dev-infra-378919"
     }
 
     stages{
@@ -15,7 +15,7 @@ agent{
             steps{
                 script{
         git(
-            url: 'https://github.com/Onkar179/jenkins-gke-deploy.git',
+            url: 'https://github.com/eugenerodolph/jenkins-go-app.git',
             credentialsId: 'git-token',
             branch: 'main'
             )
@@ -26,20 +26,20 @@ agent{
         stage("Building Application Docker Image"){
             steps{
                 script{
-                    sh 'gcloud auth configure-docker asia-south1-docker.pkg.dev'
-                    sh 'docker build . -t asia-south1-docker.pkg.dev/xx/jenkins/hello-app:${BUILD_NUMBER}'
+                    sh 'gcloud auth configure-docker eu.gcr.io'
+                    sh 'docker build . -t eu.gcr.io/dev-infra-378919/jenkins/hello-app:${BUILD_NUMBER}'
                     }
                 }
             }
         stage("Pushing Application Docker Image to Google Artifact Registry"){
             steps{
                 script{
-                    sh 'docker push asia-south1-docker.pkg.dev/xx/jenkins/hello-app:${BUILD_NUMBER}'
+                    sh 'docker push eu.gcr.io/dev-infra-378919/jenkins/hello-app:${BUILD_NUMBER}'
         }}}
         stage ("Updating Deployment Manifest") {
             steps {
                 script {
-                    sh 'sed -i s+asia-south1-docker.pkg.dev/xx/jenkins/hello-app:v1+asia-south1-docker.pkg.dev/xx/jenkins/hello-app:${BUILD_NUMBER}+g manifests/deployment.yaml'
+                    sh 'sed -i s+eu.gcr.io/dev-infra-378919/jenkins/hello-app:v1+eu.gcr.io/dev-infra-378919/jenkins/hello-app:${BUILD_NUMBER}+g manifests/deployment.yaml'
                 }
             }
         }
